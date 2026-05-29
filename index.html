@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudySphere — Global Student Community</title>
+  <meta name="description" content="StudySphere is a global student community platform for high school and university students to share notes, ask questions, and study together." />
+  <meta name="keywords" content="study, students, notes, Q&A, study groups, exams, university, high school" />
+  <meta name="author" content="StudySphere" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="StudySphere — Global Student Community" />
+  <meta property="og:description" content="Share lessons, ask questions, study together, and grow with students worldwide." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://studysphere.app" />
+  <meta property="og:image" content="https://studysphere.app/og-image.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="StudySphere" />
+  <meta name="twitter:description" content="Global student community platform." />
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="light">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-icon">🌐</div>
+      <span class="logo-text">StudySphere</span>
+    </div>
+    <button class="sidebar-close" id="sidebarClose"><i class="fa fa-times"></i></button>
+  </div>
+
+  <div class="user-card" id="userCard">
+    <div class="avatar" id="sidebarAvatar">?</div>
+    <div class="user-info">
+      <div class="user-name" id="sidebarName">Guest Student</div>
+      <div class="user-level">Level <span id="sidebarLevel">1</span> · <span id="sidebarXP">0</span> XP</div>
+    </div>
+  </div>
+
+  <nav class="nav-menu">
+    <a href="#" class="nav-item active" data-page="feed"><i class="fa fa-home"></i> Feed</a>
+    <a href="#" class="nav-item" data-page="qa"><i class="fa fa-question-circle"></i> Q&A</a>
+    <a href="#" class="nav-item" data-page="notes"><i class="fa fa-file-alt"></i> Notes</a>
+    <a href="#" class="nav-item" data-page="groups"><i class="fa fa-users"></i> Study Groups</a>
+    <a href="#" class="nav-item" data-page="tools"><i class="fa fa-tools"></i> Study Tools</a>
+    <a href="#" class="nav-item" data-page="leaderboard"><i class="fa fa-trophy"></i> Leaderboard</a>
+    <a href="#" class="nav-item" data-page="profile"><i class="fa fa-user"></i> Profile</a>
+  </nav>
+
+  <div class="sidebar-subjects">
+    <div class="section-label">Subjects</div>
+    <div class="subject-tags" id="subjectTags"></div>
+  </div>
+
+  <div class="sidebar-footer">
+    <button class="theme-toggle" id="themeToggle"><i class="fa fa-moon"></i> Dark Mode</button>
+    <div class="streak-badge" id="streakBadge">🔥 <span id="streakCount">0</span> day streak</div>
+  </div>
+</aside>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay"></div>
+
+<!-- MAIN -->
+<main class="main-content">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn"><i class="fa fa-bars"></i></button>
+    <div class="search-bar">
+      <i class="fa fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search notes, questions, groups..." />
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="notifBtn" title="Notifications"><i class="fa fa-bell"></i><span class="badge">3</span></button>
+      <button class="icon-btn" id="focusBtn" title="Focus Mode"><i class="fa fa-expand"></i></button>
+      <div class="avatar sm" id="topAvatar" data-page="profile" style="cursor:pointer">?</div>
+    </div>
+  </header>
+
+  <!-- PAGES -->
+  <div class="page-wrapper">
+
+    <!-- FEED PAGE -->
+    <section class="page active" id="page-feed">
+      <div class="page-header">
+        <h1>Student Feed</h1>
+        <button class="btn btn-primary" id="newPostBtn"><i class="fa fa-plus"></i> Post</button>
+      </div>
+
+      <div class="quote-banner" id="quoteBanner"></div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="note">Notes</button>
+        <button class="filter-btn" data-filter="question">Questions</button>
+        <button class="filter-btn" data-filter="tip">Exam Tips</button>
+        <button class="filter-btn" data-filter="advice">Advice</button>
+      </div>
+
+      <div class="post-list" id="postList"></div>
+    </section>
+
+    <!-- Q&A PAGE -->
+    <section class="page" id="page-qa">
+      <div class="page-header">
+        <h1>Q&A Hub</h1>
+        <button class="btn btn-primary" id="newQuestionBtn"><i class="fa fa-plus"></i> Ask</button>
+      </div>
+      <div class="qa-list" id="qaList"></div>
+    </section>
+
+    <!-- NOTES PAGE -->
+    <section class="page" id="page-notes">
+      <div class="page-header">
+        <h1>Study Notes</h1>
+        <button class="btn btn-primary" id="uploadNoteBtn"><i class="fa fa-upload"></i> Upload Note</button>
+      </div>
+      <div class="notes-grid" id="notesGrid"></div>
+    </section>
+
+    <!-- GROUPS PAGE -->
+    <section class="page" id="page-groups">
+      <div class="page-header">
+        <h1>Study Groups</h1>
+        <button class="btn btn-primary" id="createGroupBtn"><i class="fa fa-plus"></i> Create Group</button>
+      </div>
+      <div class="groups-grid" id="groupsGrid"></div>
+
+      <!-- CHAT PANEL -->
+      <div class="chat-panel" id="chatPanel" style="display:none">
+        <div class="chat-header">
+          <button class="back-btn" id="chatBack"><i class="fa fa-arrow-left"></i></button>
+          <span id="chatGroupName">Group Chat</span>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Type a message..." />
+          <button class="btn btn-primary" id="chatSend"><i class="fa fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOLS PAGE -->
+    <section class="page" id="page-tools">
+      <div class="page-header"><h1>Study Tools</h1></div>
+      <div class="tools-grid">
+
+        <!-- Pomodoro -->
+        <div class="tool-card" id="pomodoroCard">
+          <div class="tool-icon">⏱️</div>
+          <h3>Pomodoro Timer</h3>
+          <div class="pomodoro-display" id="pomodoroDisplay">25:00</div>
+          <div class="pomodoro-controls">
+            <button class="btn btn-primary" id="pomodoroStart">Start</button>
+            <button class="btn btn-outline" id="pomodoroReset">Reset</button>
+          </div>
+          <div class="pomodoro-mode">
+            <button class="mode-btn active" data-mins="25">Focus</button>
+            <button class="mode-btn" data-mins="5">Short Break</button>
+            <button class="mode-btn" data-mins="15">Long Break</button>
+          </div>
+        </div>
+
+        <!-- Flashcards -->
+        <div class="tool-card" id="flashcardCard">
+          <div class="tool-icon">🃏</div>
+          <h3>Flashcards</h3>
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-inner" id="flashcardInner">
+              <div class="flashcard-front" id="flashcardFront">Click to flip</div>
+              <div class="flashcard-back" id="flashcardBack">Answer here</div>
+            </div>
+          </div>
+          <div class="flashcard-controls">
+            <button class="btn btn-outline" id="fcPrev"><i class="fa fa-chevron-left"></i></button>
+            <span id="fcCounter">1 / 1</span>
+            <button class="btn btn-outline" id="fcNext"><i class="fa fa-chevron-right"></i></button>
+          </div>
+          <button class="btn btn-primary" id="addFlashcardBtn">+ Add Card</button>
+        </div>
+
+        <!-- Task Checklist -->
+        <div class="tool-card">
+          <div class="tool-icon">✅</div>
+          <h3>Daily Tasks</h3>
+          <div class="task-input-row">
+            <input type="text" id="taskInput" placeholder="Add a study task..." />
+            <button class="btn btn-primary" id="addTaskBtn"><i class="fa fa-plus"></i></button>
+          </div>
+          <ul class="task-list" id="taskList"></ul>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="taskProgress" style="width:0%"></div>
+          </div>
+          <div class="progress-label" id="taskProgressLabel">0% complete</div>
+        </div>
+
+        <!-- Study Goals -->
+        <div class="tool-card">
+          <div class="tool-icon">🎯</div>
+          <h3>Daily Goals</h3>
+          <div class="goals-list" id="goalsList"></div>
+          <div class="task-input-row">
+            <input type="text" id="goalInput" placeholder="Add a goal..." />
+            <button class="btn btn-primary" id="addGoalBtn"><i class="fa fa-plus"></i></button>
+          </div>
+        </div>
+
+        <!-- Study Planner -->
+        <div class="tool-card">
+          <div class="tool-icon">📅</div>
+          <h3>Study Planner</h3>
+          <div id="plannerList" class="planner-list"></div>
+          <div class="planner-form">
+            <input type="text" id="plannerSubject" placeholder="Subject" />
+            <input type="time" id="plannerTime" />
+            <button class="btn btn-primary" id="addPlannerBtn">Add</button>
+          </div>
+        </div>
+
+        <!-- Quick Quiz -->
+        <div class="tool-card">
+          <div class="tool-icon">📝</div>
+          <h3>Quick Quiz</h3>
+          <div id="quizArea"></div>
+          <button class="btn btn-primary" id="startQuizBtn">Start Quiz</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LEADERBOARD PAGE -->
+    <section class="page" id="page-leaderboard">
+      <div class="page-header"><h1>Leaderboard</h1></div>
+      <div class="leaderboard-tabs">
+        <button class="filter-btn active" data-lb="xp">Top XP</button>
+        <button class="filter-btn" data-lb="streak">Streaks</button>
+        <button class="filter-btn" data-lb="posts">Posts</button>
+      </div>
+      <div class="leaderboard-list" id="leaderboardList"></div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section class="page" id="page-profile">
+      <div class="profile-hero">
+        <div class="avatar lg" id="profileAvatar">?</div>
+        <div class="profile-info">
+          <h2 id="profileName">Guest Student</h2>
+          <div class="profile-meta" id="profileMeta">Set up your profile</div>
+          <div class="xp-bar-wrap">
+            <div class="xp-bar" id="xpBar" style="width:0%"></div>
+          </div>
+          <div class="xp-label" id="xpLabel">0 XP · Level 1</div>
+        </div>
+      </div>
+      <div class="badges-row" id="badgesRow"></div>
+      <div class="profile-stats" id="profileStats"></div>
+      <div class="profile-edit-form" id="profileEditForm">
+        <h3>Edit Profile</h3>
+        <input type="text" id="editName" placeholder="Your name" />
+        <input type="text" id="editUniversity" placeholder="School / University" />
+        <select id="editSubject">
+          <option value="">Favourite Subject</option>
+        </select>
+        <input type="text" id="editCountry" placeholder="Country" />
+        <button class="btn btn-primary" id="saveProfileBtn">Save Profile</button>
+      </div>
+    </section>
+
+  </div><!-- /page-wrapper -->
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">New Post</h3>
+      <button class="modal-close" id="modalClose"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSubmit">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
